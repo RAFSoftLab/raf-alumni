@@ -4,6 +4,8 @@ Alumni Network is a comprehensive digital platform designed to connect alumni, f
 
 # System Roles
 
+![u2](https://github.com/RAFSoftLab/alumni-network/assets/13720535/eb0e1f44-4884-4f50-abb6-079436a2ee53)
+
 System supports several key roles which are essential for the effective functioning and management of the platform. Each role has specific responsibilities and access privileges to ensure smooth operation and to meet the diverse needs of its users. Here's an explanation of the primary roles:
 
 ## 1. Alumni User
@@ -62,6 +64,8 @@ System supports several key roles which are essential for the effective function
 
 # Functional requirements
 
+![u1](https://github.com/RAFSoftLab/alumni-network/assets/13720535/85c0641b-1e09-4e60-a4df-f8177c34dd51)
+
 Below is a detailed list of the functional requirements essential for the successful operation and utility of the platform:
 
 ## 1. **User Account Management:**
@@ -101,7 +105,7 @@ Below is a detailed list of the functional requirements essential for the succes
    - **FR10.2 Web Client Development:** Develop a responsive web client accessible on various browsers and devices.
 
 ## 11. **Administrative Tools:**
-   - **FR11.1 Administrative Dashboard:** Create an administrative dashboard for managing the platform, including user account management and content moderation.  
+   - **FR11.1 Administrative Dashboard:** Create an administrative dashboard for managing the platform, including user account management and content moderation.
 
 # Additional Functionalities
 

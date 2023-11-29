@@ -103,8 +103,6 @@ Below is a detailed list of the functional requirements essential for the succes
 ## 11. **Administrative Tools:**
    - **FR11.1 Administrative Dashboard:** Create an administrative dashboard for managing the platform, including user account management and content moderation.  
 
-<br/>
-
 # Additional Functionalities
 
 Below is a list of additional optional functional requirements that can bring more value to the platform in future stages of development:

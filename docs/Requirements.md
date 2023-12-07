@@ -13,6 +13,7 @@ Below is a detailed list of the functional requirements essential for the succes
 ## 2. **Profile Management:**
    - **FR2.1 Personal Information Entry:** Allow users to enter and update personal and contact information including email, LinkedIn, phone number, and a profile picture.
    - **FR2.2 Employment Information Entry:** Enable alumni to add and update their employment information, selecting existing companies or adding new ones.
+   - **FR2.3 Request Access:** Allow alumni to join the platform by sending the request to Faculty Admins.
 
 ## 3. **Search and Networking:**
    - **FR3.1 Alumni Search Functionality:** Implement a search function for alumni to find and view profiles of other alumni based on criteria like name, study program, year of graduation, or company.

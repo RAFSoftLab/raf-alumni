@@ -7,13 +7,13 @@ Below is a detailed list of the functional requirements essential for the succes
 ## 1. **User Account Management:**
    - **FR1.1 Automated Account Creation:** Automatically create user accounts for students upon their thesis defense, using data from the existing student information system.
    - **FR1.2 Account Activation and Data Completion:** Enable alumni to activate their accounts via email and complete their profile with additional information such as employment details.
+   - **FR1.3 Request Access:** Allow alumni to join the platform by sending the request to Faculty Admins.
 
 ![u3](https://github.com/RAFSoftLab/alumni-network/assets/13720535/573974cc-1c2d-4dee-a517-2a5dc3a9617a)
 
 ## 2. **Profile Management:**
    - **FR2.1 Personal Information Entry:** Allow users to enter and update personal and contact information including email, LinkedIn, phone number, and a profile picture.
    - **FR2.2 Employment Information Entry:** Enable alumni to add and update their employment information, selecting existing companies or adding new ones.
-   - **FR2.3 Request Access:** Allow alumni to join the platform by sending the request to Faculty Admins.
 
 ## 3. **Search and Networking:**
    - **FR3.1 Alumni Search Functionality:** Implement a search function for alumni to find and view profiles of other alumni based on criteria like name, study program, year of graduation, or company.

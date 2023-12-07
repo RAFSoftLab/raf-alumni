@@ -46,15 +46,15 @@ Below is a detailed list of the functional requirements essential for the succes
 ## 11. **Administrative Tools:**
    - **FR11.1 Administrative Dashboard:** Create an administrative dashboard for managing the platform, including user account management and content moderation.
 
+## 12. **Event Management and RSVP System:**
+   - **FR12.1 Online Event Organization Tool:** Implement a feature for organizing virtual or in-person alumni events, including RSVP tracking, event details, and calendar integration.
+
 # Additional Functionalities
 
 Below is a list of additional optional functional requirements that can bring more value to the platform in future stages of development:
 
 ### Alumni Mentorship Program
 - **Pairing Alumni with Current Students:** Develop a feature for alumni to sign up as mentors and be paired with current students based on shared interests, academic backgrounds, or career goals.
-
-### Event Management and RSVP System
-- **Online Event Organization Tool:** Implement a feature for organizing virtual or in-person alumni events, including RSVP tracking, event details, and calendar integration.
 
 ### Alumni Achievements Showcase
 - **Highlighting Alumni Success Stories:** Create a section to feature alumni achievements, success stories, and career advancements.

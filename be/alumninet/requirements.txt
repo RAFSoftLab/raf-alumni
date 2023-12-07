@@ -4,3 +4,5 @@ djangorestframework==3.14.0
 drf-jwt==1.19.2
 whitenoise==6.4.0
 shortuuid==1.0.11
+Pillow==10.1.0
+requests==2.31.0

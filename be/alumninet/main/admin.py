@@ -31,7 +31,6 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(models.AppUser, CustomUserAdmin)
 admin.site.register(models.FacultyAdministratorUser)
 admin.site.register(models.AlumniUser)
-admin.site.register(models.AlumniStudentDraft)
 admin.site.register(models.Company)
 admin.site.register(models.EmploymentHistory)
 admin.site.register(models.AcademicDegree)

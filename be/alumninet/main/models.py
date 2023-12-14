@@ -32,7 +32,8 @@ class FacultyAdministratorUser(models.Model):
 
 
 class AlumniUser(models.Model):
-    user = models.OneToOneField(AppUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(AppUser, on_delete=models.CASCADE, null=True)
+    full_name = models.CharField(max_length=100, blank=True)
     biography = models.TextField(blank=True)
     date_of_birth = models.DateField(blank=True, null=True)
     phone = models.CharField(max_length=20, blank=True)
@@ -41,17 +42,8 @@ class AlumniUser(models.Model):
     social_id_2 = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
-        return self.user.email
+        return self.full_name
     
-
-class AlumniStudentDraft(models.Model):
-    ext_id = models.IntegerField(unique=True)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    image_url = models.URLField(blank=True)
-
-    def __str__(self):
-        return f"{self.first_name} {self.last_name} - {self.ext_id}"
 
 class Company(models.Model):
     employees = models.ManyToManyField(AlumniUser, through='EmploymentHistory')
@@ -70,12 +62,12 @@ class EmploymentHistory(models.Model):
     alumni_user = models.ForeignKey(AlumniUser, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     role = models.CharField(max_length=100)
-    start_date = models.DateField()
+    start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     description = models.TextField(blank=True)
 
     def __str__(self):
-        return f"{self.alumni_user.user.email} - {self.company.name} - {self.role}"
+        return f"{self.alumni_user.full_name} - {self.company.name} - {self.role}"
     
 
 class AcademicDegree(models.Model):
@@ -84,6 +76,7 @@ class AcademicDegree(models.Model):
     ects = models.IntegerField()
     title = models.CharField(max_length=100)
     level = models.CharField(max_length=100)
+    level_name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
@@ -97,7 +90,7 @@ class AcademicHistory(models.Model):
     student_number = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"{self.alumni_user.user.first_name} {self.alumni_user.user.last_name} - {self.academic_degree.name} - {self.student_number}"
+        return f"{self.alumni_user.full_name} - {self.academic_degree.name} - {self.student_number}"
     
 
 class ThesisDefense(models.Model):
@@ -107,9 +100,9 @@ class ThesisDefense(models.Model):
     grade = models.IntegerField(validators=[MinValueValidator(5), MaxValueValidator(10)])
     abstract = models.TextField(blank=True)
     mentor = models.CharField(max_length=100)
-    commission_member_1 = models.CharField(max_length=100)
-    commission_member_2 = models.CharField(max_length=100)
-    commission_member_3 = models.CharField(max_length=100)
+    commission_member_1 = models.CharField(max_length=100, blank=True)
+    commission_member_2 = models.CharField(max_length=100, blank=True)
+    commission_member_3 = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
-        return f"{self.academic_degree.name} - {self.date} - {self.grade}"
+        return f"{self.thesis_title} - {self.date} - {self.grade}"

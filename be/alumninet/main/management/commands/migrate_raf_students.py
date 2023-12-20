@@ -21,7 +21,6 @@ class Command(BaseCommand):
                 student = self.get_student(id)
                 name = student['ime']
                 surname = student['prezime']
-                image_url = f"http://alumni.raf.edu.rs/images/slike/{student['slika']}"
                 biography = student['biografija'] or ''
                 linkedin = self.extract_linkedin_username(student['linkedin'])
                 

@@ -1,7 +1,12 @@
-import 'package:alumni_network/students/student_profile/bloc/student_profile_bloc.dart';
+import 'package:alumni_network/api/alumni_network_service.dart';
+import 'package:alumni_network/api/initializer.dart';
+import 'package:alumni_network/ui/companies/details/bloc/company_details_bloc.dart';
+import 'package:alumni_network/ui/companies/details/company_details_page.dart';
+import 'package:alumni_network/ui/students/student_profile/bloc/student_profile_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 class StudentProfilePage extends StatelessWidget {
   const StudentProfilePage({super.key});
@@ -36,11 +41,13 @@ class StudentProfilePage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  subtitle: state.alumniUser.profileImageUrl != null ? CachedNetworkImage(
-                    imageUrl: state.alumniUser.profileImageUrl ?? '',
-                    placeholder: (context, url) => Center(child: const CircularProgressIndicator()),
-                    errorWidget: (context, url, error) => const Icon(Icons.error),
-                  ) : null,
+                  subtitle: state.alumniUser.profileImageUrl != null
+                      ? CachedNetworkImage(
+                          imageUrl: state.alumniUser.profileImageUrl ?? '',
+                          placeholder: (context, url) => Center(child: const CircularProgressIndicator()),
+                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                        )
+                      : null,
                 ),
                 ListTile(
                   title: Row(
@@ -72,7 +79,7 @@ class StudentProfilePage extends StatelessWidget {
                                       children: [
                                         const Divider(),
                                         Text('Tema: ${e.thesisDefense!.thesisTitle}'),
-                                        Text('Odbranjen: ${e.thesisDefense!.date}'),
+                                        Text('Odbranjen: ${DateFormat.yMMMd('sr').format(e.thesisDefense!.date)}'),
                                         Text('Mentor: ${e.thesisDefense!.mentor}'),
                                         Text(
                                             'Komisija: ${e.thesisDefense!.commissionMember1} ${e.thesisDefense!.commissionMember2} ${e.thesisDefense!.commissionMember3}'),
@@ -104,13 +111,26 @@ class StudentProfilePage extends StatelessWidget {
                       children: state.employmentHistory
                           .map(
                             (e) => ListTile(
+                              onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => BlocProvider<CompanyDetailsBloc>(
+                                    create: (context) => CompanyDetailsBloc(
+                                      company: e.company,
+                                      service: getService<AlumniNetworkService>(),
+                                    )..add(CompanyDetailsInit()),
+                                    child: CompanyDetailsPage(company: e.company),
+                                  ),
+                                ),
+                              ),
                               title: Text(e.company.name),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text('Pozicija: ${e.role}'),
-                                  Text('Od: ${e.startDate}'),
-                                  Text('Do: ${e.endDate ?? 'Trenutno zaposlenje'}'),
+                                  Text('Od: ${e.startDate != null ? DateFormat.yMMMd('sr').format(e.startDate!) : ''}'),
+                                  Text(
+                                    'Do: ${e.endDate != null ? DateFormat.yMMMd('sr').format(e.endDate!) : 'Trenutno zaposlenje'}',
+                                  ),
                                 ],
                               ),
                             ),

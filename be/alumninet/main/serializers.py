@@ -2,6 +2,13 @@ from rest_framework import serializers
 
 from . import models
 
+
+class AppUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.AppUser
+        fields = ('id', 'email', 'first_name', 'last_name')
+
+
 class AlumniUserSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -50,3 +57,24 @@ class EmploymentHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.EmploymentHistory
         fields = '__all__'
+
+
+class PostCommentSerializer(serializers.ModelSerializer):
+    author = AlumniUserSerializer()
+
+    class Meta:
+        model = models.PostComment
+        fields = '__all__'
+
+
+class PostSerializer(serializers.ModelSerializer):
+    author = AlumniUserSerializer()
+    comments = serializers.SerializerMethodField()
+
+    class Meta:
+        model = models.Post
+        fields = '__all__'
+
+    def get_comments(self, obj):
+        comments = models.PostComment.objects.filter(post=obj)
+        return PostCommentSerializer(comments, many=True).data

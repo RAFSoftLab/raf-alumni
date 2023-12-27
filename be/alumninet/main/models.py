@@ -106,3 +106,23 @@ class ThesisDefense(models.Model):
 
     def __str__(self):
         return f"{self.thesis_title} - {self.date} - {self.grade}"
+    
+
+class Post(models.Model):
+    title = models.CharField(max_length=255)
+    text = models.TextField()
+    date_created = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(AlumniUser, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
+    
+
+class PostComment(models.Model):
+    text = models.TextField()
+    date_created = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(AlumniUser, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.text

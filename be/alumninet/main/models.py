@@ -43,7 +43,16 @@ class AlumniUser(models.Model):
 
     def __str__(self):
         return self.full_name
-    
+
+
+class StudentUser(models.Model):
+    user = models.OneToOneField(AppUser, on_delete=models.CASCADE, null=True)
+    full_name = models.CharField(max_length=100, blank=True)
+    student_number = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        return self.full_name + " - " + self.student_number
+
 
 class Company(models.Model):
     employees = models.ManyToManyField(AlumniUser, through='EmploymentHistory')
@@ -126,3 +135,30 @@ class PostComment(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class Course(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+    
+
+class CourseScheduleEntry(models.Model):
+    LECTURE = "LEC"
+    LAB = "LAB"
+    
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    professor = models.CharField(max_length=100)
+    type = models.CharField(max_length=3, choices=[
+        (LECTURE, "Lecture"),
+        (LAB, "Lab")
+    ])
+    day = models.CharField(max_length=100)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    classroom = models.CharField(max_length=100)
+    groups = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        return f"{self.course.name} - {self.day} - {self.start_time} - {self.end_time}"

@@ -32,7 +32,7 @@ class FacultyAdministratorUser(models.Model):
 
 
 class AlumniUser(models.Model):
-    user = models.OneToOneField(AppUser, on_delete=models.CASCADE, null=True)
+    user = models.OneToOneField(AppUser, on_delete=models.CASCADE, null=True, blank=True)
     full_name = models.CharField(max_length=100, blank=True)
     biography = models.TextField(blank=True)
     date_of_birth = models.DateField(blank=True, null=True)
@@ -46,7 +46,7 @@ class AlumniUser(models.Model):
 
 
 class StudentUser(models.Model):
-    user = models.OneToOneField(AppUser, on_delete=models.CASCADE, null=True)
+    user = models.OneToOneField(AppUser, on_delete=models.CASCADE, null=True, blank=True)
     full_name = models.CharField(max_length=100, blank=True)
     student_number = models.CharField(max_length=100, blank=True)
 
@@ -143,12 +143,13 @@ class Course(models.Model):
     def __str__(self):
         return self.name
     
-
+    
 class CourseScheduleEntry(models.Model):
     LECTURE = "LEC"
     LAB = "LAB"
     
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    subscribed_students = models.ManyToManyField(StudentUser, through='CourseScheduleStudentSubscription', related_name='subscribed_courses', blank=True)
     professor = models.CharField(max_length=100)
     type = models.CharField(max_length=3, choices=[
         (LECTURE, "Lecture"),
@@ -162,3 +163,12 @@ class CourseScheduleEntry(models.Model):
 
     def __str__(self):
         return f"{self.course.name} - {self.day} - {self.start_time} - {self.end_time}"
+
+
+class CourseScheduleStudentSubscription(models.Model):
+    student = models.ForeignKey(StudentUser, on_delete=models.CASCADE)
+    course_schedule_entry = models.ForeignKey(CourseScheduleEntry, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f"{self.student.full_name} - {self.course_schedule_entry.course.name} - {self.course_schedule_entry.day} - {self.course_schedule_entry.start_time} - {self.course_schedule_entry.end_time}"
+

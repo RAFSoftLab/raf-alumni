@@ -78,3 +78,26 @@ class PostSerializer(serializers.ModelSerializer):
     def get_comments(self, obj):
         comments = models.PostComment.objects.filter(post=obj)
         return PostCommentSerializer(comments, many=True).data
+    
+
+class CourseSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Course
+        fields = '__all__'
+        
+
+class CourseScheduleEntrySerializer(serializers.ModelSerializer):
+    course = CourseSerializer()
+    
+    class Meta:
+        model = models.CourseScheduleEntry
+        fields = ('id', 'course', 'professor', 'type', 'day', 'classroom', 'groups', 'start_time', 'end_time')
+        
+
+class CourseScheduleStudentSubscriptionSerializer(serializers.ModelSerializer):
+    course_schedule_entry = CourseScheduleEntrySerializer()
+    
+    class Meta:
+        model = models.CourseScheduleStudentSubscription
+        fields = ('id', 'course_schedule_entry')

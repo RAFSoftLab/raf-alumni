@@ -77,3 +77,52 @@ class Posts(APIView):
         serializer = serializers.PostSerializer(posts, many=True)
 
         return Response(serializer.data)
+    
+
+class Courses(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        courses = models.Course.objects.all().order_by('name')
+        serializer = serializers.CourseSerializer(courses, many=True)
+
+        return Response(serializer.data)
+    
+
+class CourseSchedule(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        course_schedule = models.CourseScheduleEntry.objects.all().order_by('course__name', 'type', 'day', 'start_time')
+        serializer = serializers.CourseScheduleEntrySerializer(course_schedule, many=True)
+
+        return Response(serializer.data)
+    
+
+class CourseScheduleStudentSubscriptions(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        validator = validators.GetCourseScheduleStudentSubscriptionsValidator(data=request.query_params)
+        if not validator.is_valid():
+            return Response(status=400)
+        
+        data = validator.validated_data
+        student_user = data['student_user']
+        subscriptions = models.CourseScheduleStudentSubscription.objects.filter(student=student_user)
+        serializer = serializers.CourseScheduleStudentSubscriptionSerializer(subscriptions, many=True)
+
+        return Response(serializer.data)
+    
+    def post(self, request):
+        validator = validators.PostCourseScheduleStudentSubscriptionsValidator(data=request.data)
+        if not validator.is_valid():
+            return Response(status=400)
+        
+        data = validator.validated_data
+        student_user = data['student_user']
+        course_schedule_entry = data['course_schedule_entry']
+        subscription = models.CourseScheduleStudentSubscription.objects.create(student=student_user, course_schedule_entry=course_schedule_entry)
+        serializer = serializers.CourseScheduleStudentSubscriptionSerializer(subscription)
+
+        return Response(serializer.data)

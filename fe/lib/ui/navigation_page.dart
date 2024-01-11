@@ -4,6 +4,8 @@ import 'package:alumni_network/ui/companies/bloc/companies_page_bloc.dart';
 import 'package:alumni_network/ui/companies/companies_page.dart';
 import 'package:alumni_network/ui/feed/bloc/feed_page_bloc.dart';
 import 'package:alumni_network/ui/feed/feed_page.dart';
+import 'package:alumni_network/ui/schedule/bloc/schedule_bloc.dart';
+import 'package:alumni_network/ui/schedule/schedule_page.dart';
 import 'package:alumni_network/ui/students/bloc/students_page_bloc.dart';
 import 'package:alumni_network/ui/students/students_page.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +23,6 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
@@ -48,6 +49,10 @@ class _NavigationExampleState extends State<NavigationExample> {
             icon: Icon(Icons.business),
             label: 'Kompanije',
           ),
+          NavigationDestination(
+            icon: Icon(Icons.calendar_month),
+            label: 'Raspored',
+          ),
         ],
       ),
       body: <Widget>[
@@ -73,6 +78,14 @@ class _NavigationExampleState extends State<NavigationExample> {
             service: getService<AlumniNetworkService>(),
           )..add(CompaniesPageInit()),
           child: const CompaniesPage(),
+        ),
+
+        /// Schedule page
+        BlocProvider<ScheduleBloc>(
+          create: (context) => ScheduleBloc(
+            service: getService<AlumniNetworkService>(),
+          )..add(ScheduleViewStudentSchedule()),
+          child: const SchedulePage(),
         ),
       ][currentPageIndex],
     );

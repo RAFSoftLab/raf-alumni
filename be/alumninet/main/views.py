@@ -120,9 +120,24 @@ class CourseScheduleStudentSubscriptions(APIView):
             return Response(status=400)
         
         data = validator.validated_data
-        student_user = data['student_user']
-        course_schedule_entry = data['course_schedule_entry']
+        student_user_id = data['student_user']
+        course_schedule_entry_id = data['course_schedule_entry']
+        
+        student_user = models.StudentUser.objects.get(id=student_user_id)
+        course_schedule_entry = models.CourseScheduleEntry.objects.get(id=course_schedule_entry_id)
         subscription = models.CourseScheduleStudentSubscription.objects.create(student=student_user, course_schedule_entry=course_schedule_entry)
         serializer = serializers.CourseScheduleStudentSubscriptionSerializer(subscription)
 
         return Response(serializer.data)
+    
+
+    def delete(self, request):
+        validator = validators.DeleteCourseScheduleStudentSubscriptionsValidator(data=request.query_params)
+        if not validator.is_valid():
+            return Response(status=400)
+        
+        data = validator.validated_data
+        course_schedule_subscription = data['course_schedule_student_subscription']
+        models.CourseScheduleStudentSubscription.objects.get(id=course_schedule_subscription).delete()
+
+        return Response(status=204)

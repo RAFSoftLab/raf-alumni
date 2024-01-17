@@ -1,3 +1,4 @@
+from rest_framework_jwt.utils import jwt_encode_payload
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
@@ -5,6 +6,62 @@ from rest_framework import permissions
 from . import models
 from . import serializers
 from . import validators
+from . import utils
+
+import requests
+import re
+
+class GoogleLogin(APIView):
+    permission_classes = [permissions.AllowAny]
+    
+    def post(self, request):
+        id_token = request.data.get('id_token')
+        
+        google_info = requests.get(f'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token={id_token}')
+        google_info.raise_for_status()
+
+        google_data = google_info.json()
+        email = google_data.get('email')
+        first_name = google_data.get('given_name')
+        last_name = google_data.get('family_name')
+        
+        user, created = models.AppUser.objects.get_or_create(email=email, defaults={'first_name': first_name, 'last_name': last_name})
+        if created:
+            if email.endswith('@raf.rs'):
+                pattern = r"(\d+.*?)(?=@)"
+                match = re.search(pattern, email)
+                if match:
+                    index = match.group(1)
+                    models.StudentUser.objects.create(user=user, full_name=f"{first_name} {last_name}", student_number=self.convert_index_format(index))
+                else:
+                    models.FacultyAdministratorUser.objects.create(user=user)
+            else:
+                models.AlumniUser.objects.create(user=user, full_name=f"{first_name} {last_name}")
+            
+        payload = utils.jwt_create_payload(user)
+        token = jwt_encode_payload(payload)
+
+        return Response({"token": token})
+    
+    def convert_index_format(self, index):
+        pattern = r"(\d+)([a-zA-Z]+)"
+        match = re.match(pattern, index)
+        if match:
+            numbers = match.group(1)
+            letters = match.group(2)
+            return f"{letters.upper()}{''.join(numbers[i] for i in range(0, 2))}/{''.join(numbers[i] for i in range(2, len(numbers)))}"
+        else:
+            return "Invalid format"
+
+
+class Me(APIView):
+    
+    def get(self, request):
+        user = request.user
+        serializer = serializers.AppUserSerializer(user)
+        
+        return Response(serializer.data)
+
 
 class AlumniUsers(APIView):
     permission_classes = [permissions.AllowAny]
@@ -100,16 +157,9 @@ class CourseSchedule(APIView):
     
 
 class CourseScheduleStudentSubscriptions(APIView):
-    permission_classes = [permissions.AllowAny]
 
-    def get(self, request):
-        validator = validators.GetCourseScheduleStudentSubscriptionsValidator(data=request.query_params)
-        if not validator.is_valid():
-            return Response(status=400)
-        
-        data = validator.validated_data
-        student_user = data['student_user']
-        subscriptions = models.CourseScheduleStudentSubscription.objects.filter(student=student_user)
+    def get(self, request):        
+        subscriptions = models.CourseScheduleStudentSubscription.objects.filter(student__user=request.user)
         serializer = serializers.CourseScheduleStudentSubscriptionSerializer(subscriptions, many=True)
 
         return Response(serializer.data)
@@ -120,10 +170,9 @@ class CourseScheduleStudentSubscriptions(APIView):
             return Response(status=400)
         
         data = validator.validated_data
-        student_user_id = data['student_user']
         course_schedule_entry_id = data['course_schedule_entry']
         
-        student_user = models.StudentUser.objects.get(id=student_user_id)
+        student_user = models.StudentUser.objects.get(user=request.user)
         course_schedule_entry = models.CourseScheduleEntry.objects.get(id=course_schedule_entry_id)
         subscription = models.CourseScheduleStudentSubscription.objects.create(student=student_user, course_schedule_entry=course_schedule_entry)
         serializer = serializers.CourseScheduleStudentSubscriptionSerializer(subscription)

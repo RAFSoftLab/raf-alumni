@@ -9,11 +9,7 @@ class GetAcademicHistoryValidator(serializers.Serializer):
 class GetEmploymentHistoryValidator(serializers.Serializer):
     alumni_user = serializers.IntegerField(required=True)
     
-class GetCourseScheduleStudentSubscriptionsValidator(serializers.Serializer):
-    student_user = serializers.IntegerField(required=True)
-    
 class PostCourseScheduleStudentSubscriptionsValidator(serializers.Serializer):
-    student_user = serializers.IntegerField(required=True)
     course_schedule_entry = serializers.IntegerField(required=True)
     
 class DeleteCourseScheduleStudentSubscriptionsValidator(serializers.Serializer):

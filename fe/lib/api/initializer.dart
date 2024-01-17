@@ -1,9 +1,11 @@
 import 'package:alumni_network/api/alumni_network_service.dart';
 import 'package:alumni_network/api/dao/alumni_network_mock_dao.dart';
 import 'package:alumni_network/api/dao/alumni_network_rest_dao.dart';
+import 'package:alumni_network/auth/repository/authentication_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 
 final getService = GetIt.instance;
@@ -39,16 +41,24 @@ class Initializer {
   }
 
   Future<void> initServices({bool isMock = false}) async {
+    getService.registerLazySingleton<AuthenticationRepository>(
+      () => AuthenticationRepository(storage: FlutterSecureStorage()),
+    );
     if (isMock) {
       _initMockServices();
     } else {
       _initRestServices();
     }
+    await getService<AuthenticationRepository>().initialize();
   }
 
   void initBlocObserver() => Bloc.observer = GlobalBlocObserver();
 
   Dio _initDio() {
+    final interceptorExclude = <String>[
+      '${AlumniNetworkService.baseUrl}/api/google-login',
+    ];
+
     final dio = Dio();
     dio.options.baseUrl = '${AlumniNetworkService.baseUrl}/api/';
     dio.options.connectTimeout = const Duration(minutes: 1);
@@ -60,7 +70,11 @@ class Initializer {
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           if (options.uri.toString().contains(AlumniNetworkService.baseUrl)) {
-            // options.headers['Authorization'] = 'Bearer $jwt';
+            if (interceptorExclude.any((exclude) => options.uri.toString().contains(exclude))) {
+              return handler.next(options);
+            }
+            final jwt = getService<AuthenticationRepository>().jwt;
+            options.headers['Authorization'] = 'Bearer $jwt';
           }
           return handler.next(options);
         },

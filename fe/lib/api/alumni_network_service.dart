@@ -6,6 +6,7 @@ import 'package:alumni_network/models/course_schedule_entry.dart';
 import 'package:alumni_network/models/course_schedule_student_subscription.dart';
 import 'package:alumni_network/models/employment_history.dart';
 import 'package:alumni_network/models/post.dart';
+import 'package:alumni_network/models/user.dart';
 
 class AlumniNetworkService {
   AlumniNetworkService({required this.dao});
@@ -13,6 +14,13 @@ class AlumniNetworkService {
   static const String baseUrl = 'http://localhost:8080';
 
   final AlumniNetworkDAO dao;
+
+  Future<User> getUser() => dao.getUser();
+
+  Future<String> googleSignIn({required String accessToken, required String idToken}) => dao.googleSignIn(
+        accessToken: accessToken,
+        idToken: idToken,
+      );
 
   Future<List<AlumniUser>> getAlumniUsers({int? companyId}) => dao.getAlumniUsers(companyId: companyId);
 
@@ -28,11 +36,11 @@ class AlumniNetworkService {
 
   Future<List<CourseScheduleEntry>> getSchedule() => dao.getSchedule();
 
-  Future<List<CourseScheduleStudentSubscription>> getStudentSchedule({required int studentId}) =>
-      dao.getStudentSchedule(studentId: studentId);
+  Future<List<CourseScheduleStudentSubscription>> getStudentSchedule() =>
+      dao.getStudentSchedule();
 
-  Future<void> subscribeToCourseScheduleEntry({required int studentId, required int courseScheduleEntryId}) =>
-      dao.subscribeToCourseScheduleEntry(studentId: studentId, courseScheduleEntryId: courseScheduleEntryId);
+  Future<void> subscribeToCourseScheduleEntry({required int courseScheduleEntryId}) =>
+      dao.subscribeToCourseScheduleEntry(courseScheduleEntryId: courseScheduleEntryId);
 
   Future<void> unsubscribeFromCourseScheduleEntry({required int courseScheduleStudentSubscriptionId}) =>
       dao.unsubscribeFromCourseScheduleEntry(

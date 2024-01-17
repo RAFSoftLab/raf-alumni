@@ -13,10 +13,6 @@ class StudentsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text('Alumni Mreža'),
-      ),
       body: BlocBuilder<StudentsPageBloc, StudentsPageState>(
         builder: (context, state) {
           if (state is StudentsPageLoading) {

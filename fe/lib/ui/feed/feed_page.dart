@@ -14,10 +14,6 @@ class FeedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text('Alumni Mreža'),
-      ),
       body: BlocBuilder<FeedPageBloc, FeedPageState>(
         builder: (context, state) {
           if (state is FeedPageLoading) {

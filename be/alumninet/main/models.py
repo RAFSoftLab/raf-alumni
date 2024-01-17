@@ -15,10 +15,23 @@ class AppUser(AbstractUser):
     objects = CustomUserManager()
 
     def is_faculty_administrator(self):
-        return hasattr(self, 'faculty_administrator_user')
+        return hasattr(self, 'facultyadministratoruser')
     
     def is_alumni(self):
-        return hasattr(self, 'alumni_user')
+        return hasattr(self, 'alumniuser')
+    
+    def is_student(self):
+        return hasattr(self, 'studentuser')
+    
+    def get_role(self):
+        if self.is_faculty_administrator():
+            return "faculty_administrator"
+        elif self.is_alumni():
+            return "alumni"
+        elif self.is_student():
+            return "student"
+        else:
+            return "unknown"
 
     def __str__(self):
         return self.email

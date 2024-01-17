@@ -1,7 +1,10 @@
 from django.urls import path
+from django.urls.conf import include
 from . import views
 
 urlpatterns = [
+    path('me', views.Me.as_view()),
+    path('google-login', views.GoogleLogin.as_view()),
     path('alumni-users', views.AlumniUsers.as_view()),
     path('academic-history', views.AcademicHistory.as_view()),
     path('companies', views.Company.as_view()),

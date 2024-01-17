@@ -7,6 +7,7 @@ import 'package:alumni_network/models/course_schedule_entry.dart';
 import 'package:alumni_network/models/course_schedule_student_subscription.dart';
 import 'package:alumni_network/models/employment_history.dart';
 import 'package:alumni_network/models/post.dart';
+import 'package:alumni_network/models/user.dart';
 import 'package:dio/dio.dart';
 
 class AlumniNetworkRestDAO implements AlumniNetworkDAO {
@@ -16,6 +17,15 @@ class AlumniNetworkRestDAO implements AlumniNetworkDAO {
 
   final Dio dio;
   late final RestClient client;
+
+  @override
+  Future<User> getUser() => client.getUser();
+
+  @override
+  Future<String> googleSignIn({required String accessToken, required String idToken}) => client.googleSignIn(
+        accessToken: accessToken,
+        idToken: idToken,
+      );
 
   @override
   Future<List<AlumniUser>> getAlumniUsers({int? companyId}) => client.getAlumniUsers(companyId: companyId);
@@ -38,12 +48,12 @@ class AlumniNetworkRestDAO implements AlumniNetworkDAO {
   Future<List<CourseScheduleEntry>> getSchedule() => client.getSchedule();
 
   @override
-  Future<List<CourseScheduleStudentSubscription>> getStudentSchedule({required int studentId}) =>
-      client.getStudentSchedule(studentId: studentId);
+  Future<List<CourseScheduleStudentSubscription>> getStudentSchedule() =>
+      client.getStudentSchedule();
 
   @override
-  Future<void> subscribeToCourseScheduleEntry({required int studentId, required int courseScheduleEntryId}) =>
-      client.subscribeToCourseScheduleEntry(studentId: studentId, courseScheduleEntryId: courseScheduleEntryId);
+  Future<void> subscribeToCourseScheduleEntry({required int courseScheduleEntryId}) =>
+      client.subscribeToCourseScheduleEntry(courseScheduleEntryId: courseScheduleEntryId);
 
   @override
   Future<void> unsubscribeFromCourseScheduleEntry({required int courseScheduleStudentSubscriptionId}) =>

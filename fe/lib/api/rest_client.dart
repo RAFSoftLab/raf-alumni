@@ -5,12 +5,19 @@ import 'package:alumni_network/models/course_schedule_entry.dart';
 import 'package:alumni_network/models/course_schedule_student_subscription.dart';
 import 'package:alumni_network/models/employment_history.dart';
 import 'package:alumni_network/models/post.dart';
+import 'package:alumni_network/models/user.dart';
 import 'package:dio/dio.dart';
 
 class RestClient {
   RestClient({required this.dio});
 
   final Dio dio;
+
+  Future<User> getUser() async {
+    final response = await dio.get<Map<String, dynamic>>('me');
+
+    return User.fromMap(response.data!);
+  }
 
   Future<List<AlumniUser>> getAlumniUsers({int? companyId}) async {
     final queryParams = <String, dynamic>{};
@@ -62,22 +69,18 @@ class RestClient {
     return response.data!.map((e) => CourseScheduleEntry.fromMap(e)).toList();
   }
 
-  Future<List<CourseScheduleStudentSubscription>> getStudentSchedule({required int studentId}) async {
+  Future<List<CourseScheduleStudentSubscription>> getStudentSchedule() async {
     final response = await dio.get<List>(
       'course-schedule-student-subscriptions',
-      queryParameters: <String, dynamic>{
-        'student_user': studentId,
-      },
     );
 
     return response.data!.map((e) => CourseScheduleStudentSubscription.fromMap(e)).toList();
   }
 
-  Future<void> subscribeToCourseScheduleEntry({required int studentId, required int courseScheduleEntryId}) async {
+  Future<void> subscribeToCourseScheduleEntry({required int courseScheduleEntryId}) async {
     await dio.post(
       'course-schedule-student-subscriptions',
       data: <String, dynamic>{
-        'student_user': studentId,
         'course_schedule_entry': courseScheduleEntryId,
       },
     );
@@ -90,5 +93,16 @@ class RestClient {
         'course_schedule_student_subscription': courseScheduleStudentSubscriptionId,
       },
     );
+  }
+
+  Future<String> googleSignIn({required String accessToken, required String idToken}) async {
+    final response = await dio.post<Map<String, dynamic>>(
+      'google-login',
+      data: <String, dynamic>{
+        'id_token': idToken,
+      },
+    );
+
+    return response.data!['token'];
   }
 }

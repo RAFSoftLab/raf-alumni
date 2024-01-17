@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:alumni_network/api/alumni_network_service.dart';
 import 'package:alumni_network/models/course_schedule_entry.dart';
 import 'package:alumni_network/models/course_schedule_student_subscription.dart';
@@ -14,7 +12,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     on<ScheduleViewStudentSchedule>((event, emit) async {
       emit(ScheduleLoading());
       try {
-        final mySchedule = await service.getStudentSchedule(studentId: 2);
+        final mySchedule = await service.getStudentSchedule();
         emit(ScheduleStudentEntriesLoaded(mySchedule: mySchedule));
       } catch (_) {
         print(_);
@@ -35,10 +33,9 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
       emit(ScheduleLoading());
       try {
         await service.subscribeToCourseScheduleEntry(
-          studentId: 2,
           courseScheduleEntryId: event.courseScheduleEntryId,
         );
-        final mySchedule = await service.getStudentSchedule(studentId: 2);
+        final mySchedule = await service.getStudentSchedule();
         if (oldState is ScheduleAllEntriesLoaded) {
           emit(ScheduleAllEntriesLoaded(fullSchedule: oldState.fullSchedule, mySchedule: mySchedule));
         } else {
@@ -56,7 +53,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         await service.unsubscribeFromCourseScheduleEntry(
           courseScheduleStudentSubscriptionId: event.courseScheduleStudentSubscriptionId,
         );
-        final mySchedule = await service.getStudentSchedule(studentId: 2);
+        final mySchedule = await service.getStudentSchedule();
         if (oldState is ScheduleAllEntriesLoaded) {
           emit(ScheduleAllEntriesLoaded(fullSchedule: oldState.fullSchedule, mySchedule: mySchedule));
         } else {

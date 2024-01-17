@@ -4,9 +4,14 @@ from . import models
 
 
 class AppUserSerializer(serializers.ModelSerializer):
+    role = serializers.SerializerMethodField()
+    
     class Meta:
         model = models.AppUser
-        fields = ('id', 'email', 'first_name', 'last_name')
+        fields = ('id', 'email', 'first_name', 'last_name', 'role')
+        
+    def get_role(self, obj):
+        return obj.get_role()
 
 
 class AlumniUserSerializer(serializers.ModelSerializer):

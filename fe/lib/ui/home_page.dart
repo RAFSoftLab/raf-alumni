@@ -1,9 +1,13 @@
 import 'package:alumni_network/api/alumni_network_service.dart';
 import 'package:alumni_network/api/initializer.dart';
+import 'package:alumni_network/auth/authentication_bloc.dart';
+import 'package:alumni_network/models/enums/user_role.dart';
 import 'package:alumni_network/ui/companies/bloc/companies_page_bloc.dart';
 import 'package:alumni_network/ui/companies/companies_page.dart';
 import 'package:alumni_network/ui/feed/bloc/feed_page_bloc.dart';
 import 'package:alumni_network/ui/feed/feed_page.dart';
+import 'package:alumni_network/ui/login/bloc/login_page_bloc.dart';
+import 'package:alumni_network/ui/login/login_page.dart';
 import 'package:alumni_network/ui/schedule/bloc/schedule_bloc.dart';
 import 'package:alumni_network/ui/schedule/schedule_page.dart';
 import 'package:alumni_network/ui/students/bloc/students_page_bloc.dart';
@@ -11,19 +15,45 @@ import 'package:alumni_network/ui/students/students_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class NavigationExample extends StatefulWidget {
-  const NavigationExample({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<NavigationExample> createState() => _NavigationExampleState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _NavigationExampleState extends State<NavigationExample> {
+class _HomePageState extends State<HomePage> {
   int currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    var userRole = UserRole.unknown;
+    final authState = context.read<AuthenticationBloc>().state;
+    if (authState is AuthenticationAuthenticated) {
+      userRole = authState.user.role;
+    }
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('RAF Mreža'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              context.read<AuthenticationBloc>().add(AuthenticationUserUnauthenticated());
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => BlocProvider<LoginPageBloc>(
+                            create: (context) => LoginPageBloc(
+                              authenticationBloc: context.read<AuthenticationBloc>(),
+                              service: getService<AlumniNetworkService>(),
+                            ),
+                            child: LoginPage(),
+                          )));
+            },
+          ),
+        ],
+      ),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {
@@ -32,7 +62,7 @@ class _NavigationExampleState extends State<NavigationExample> {
         },
         indicatorColor: Colors.amber,
         selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
+        destinations: <Widget>[
           NavigationDestination(
             icon: Badge(
               label: Text('2'),
@@ -49,10 +79,11 @@ class _NavigationExampleState extends State<NavigationExample> {
             icon: Icon(Icons.business),
             label: 'Kompanije',
           ),
-          NavigationDestination(
-            icon: Icon(Icons.calendar_month),
-            label: 'Raspored',
-          ),
+          if (userRole == UserRole.student)
+            NavigationDestination(
+              icon: Icon(Icons.calendar_month),
+              label: 'Raspored',
+            ),
         ],
       ),
       body: <Widget>[
@@ -81,12 +112,13 @@ class _NavigationExampleState extends State<NavigationExample> {
         ),
 
         /// Schedule page
-        BlocProvider<ScheduleBloc>(
-          create: (context) => ScheduleBloc(
-            service: getService<AlumniNetworkService>(),
-          )..add(ScheduleViewStudentSchedule()),
-          child: const SchedulePage(),
-        ),
+        if (userRole == UserRole.student)
+          BlocProvider<ScheduleBloc>(
+            create: (context) => ScheduleBloc(
+              service: getService<AlumniNetworkService>(),
+            )..add(ScheduleViewStudentSchedule()),
+            child: const SchedulePage(),
+          ),
       ][currentPageIndex],
     );
   }

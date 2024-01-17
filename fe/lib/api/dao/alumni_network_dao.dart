@@ -5,8 +5,13 @@ import 'package:alumni_network/models/course_schedule_entry.dart';
 import 'package:alumni_network/models/course_schedule_student_subscription.dart';
 import 'package:alumni_network/models/employment_history.dart';
 import 'package:alumni_network/models/post.dart';
+import 'package:alumni_network/models/user.dart';
 
 abstract interface class AlumniNetworkDAO {
+
+  Future<User> getUser();
+
+  Future<String> googleSignIn({required String accessToken, required String idToken});
 
   Future<List<AlumniUser>> getAlumniUsers({int? companyId});
 
@@ -20,9 +25,9 @@ abstract interface class AlumniNetworkDAO {
 
   Future<List<CourseScheduleEntry>> getSchedule();
 
-  Future<List<CourseScheduleStudentSubscription>> getStudentSchedule({required int studentId});
+  Future<List<CourseScheduleStudentSubscription>> getStudentSchedule();
 
-  Future<void> subscribeToCourseScheduleEntry({required int studentId, required int courseScheduleEntryId});
+  Future<void> subscribeToCourseScheduleEntry({required int courseScheduleEntryId});
 
   Future<void> unsubscribeFromCourseScheduleEntry({required int courseScheduleStudentSubscriptionId});
 }

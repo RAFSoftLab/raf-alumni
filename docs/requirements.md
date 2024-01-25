@@ -1,7 +1,5 @@
 # Functional requirements
 
-![u1](https://github.com/RAFSoftLab/alumni-network/assets/13720535/85c0641b-1e09-4e60-a4df-f8177c34dd51)
-
 Below is a detailed list of the functional requirements essential for the successful operation and utility of the platform:
 
 ## 1. **User Account Management:**

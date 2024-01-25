@@ -19,11 +19,16 @@ class ScheduleStudentEntriesLoaded extends ScheduleState {
 }
 
 class ScheduleAllEntriesLoaded extends ScheduleState {
-  const ScheduleAllEntriesLoaded({required this.fullSchedule, required this.mySchedule});
+  const ScheduleAllEntriesLoaded({
+    required this.fullSchedule,
+    required this.filteredSchedule,
+    required this.mySchedule,
+  });
 
   final List<CourseScheduleEntry> fullSchedule;
+  final List<CourseScheduleEntry> filteredSchedule;
   final List<CourseScheduleStudentSubscription> mySchedule;
 
   @override
-  List<Object> get props => [fullSchedule, mySchedule];
+  List<Object> get props => [fullSchedule, filteredSchedule, mySchedule];
 }

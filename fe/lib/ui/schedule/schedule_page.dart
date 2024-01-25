@@ -44,6 +44,7 @@ class SchedulePage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final entry = state.mySchedule[index].entry;
                       return CourseScheduleEntryListItem(
+                        key: ValueKey(entry.id),
                         entry: entry,
                         isSubscribed: true,
                         onChanged: (_) {
@@ -80,15 +81,28 @@ class SchedulePage extends StatelessWidget {
                   indent: 24,
                   endIndent: 24,
                 ),
+                // Search bar
+                TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Pretraži raspored',
+                    prefixIcon: Icon(Icons.search),
+                  ),
+                  onChanged: (value) {
+                    context.read<ScheduleBloc>().add(ScheduleSearch(value));
+                  },
+                ),
+                const SizedBox(height: 8),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: state.fullSchedule.length,
+                    itemCount: state.filteredSchedule.length,
                     itemBuilder: (context, index) {
-                      final entry = state.fullSchedule[index];
+                      final entry = state.filteredSchedule[index];
                       final isSubscribed = state.mySchedule.any((element) => entry == element.entry);
                       return CourseScheduleEntryListItem(
+                        key: ValueKey(entry.id),
                         entry: entry,
                         isSubscribed: isSubscribed,
+                        showCheckbox: true,
                         onChanged: (_) {
                           if (isSubscribed) {
                             context.read<ScheduleBloc>().add(ScheduleUnsubscribeFromCourseScheduleEntry(

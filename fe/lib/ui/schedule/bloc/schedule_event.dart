@@ -28,3 +28,12 @@ class ScheduleUnsubscribeFromCourseScheduleEntry extends ScheduleEvent {
   @override
   List<Object?> get props => [courseScheduleStudentSubscriptionId];
 }
+
+class ScheduleSearch extends ScheduleEvent {
+  const ScheduleSearch(this.query);
+
+  final String query;
+
+  @override
+  List<Object?> get props => [query];
+}

@@ -128,3 +128,5 @@ app.*.symbols
 .fvm/
 web/sqflite_sw.js
 web/sqlite3.wasm
+
+android/keystores/

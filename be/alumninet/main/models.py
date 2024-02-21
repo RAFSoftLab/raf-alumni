@@ -185,3 +185,23 @@ class CourseScheduleStudentSubscription(models.Model):
     def __str__(self):
         return f"{self.student.full_name} - {self.course_schedule_entry.course.name} - {self.course_schedule_entry.day} - {self.course_schedule_entry.start_time} - {self.course_schedule_entry.end_time}"
 
+
+class ExaminationPeriod(models.Model):
+    name = models.CharField(max_length=100)
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    def __str__(self):
+        return self.name
+
+
+class ExaminationEntry(models.Model):
+    examination_period = models.ForeignKey(ExaminationPeriod, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    date = models.DateField()
+    time = models.CharField(max_length=100)
+    classroom = models.CharField(max_length=100)
+    professor = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.course.name} - {self.date} - {self.time} - {self.classroom}"

@@ -22,6 +22,7 @@ dependencies:
 
   # UI packages:
   cached_network_image: 3.3.0
+  pdf_render: 1.4.0
 
 dev_dependencies:
   flutter_test:

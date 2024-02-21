@@ -4,6 +4,8 @@ import 'package:alumni_network/models/company.dart';
 import 'package:alumni_network/models/course_schedule_entry.dart';
 import 'package:alumni_network/models/course_schedule_student_subscription.dart';
 import 'package:alumni_network/models/employment_history.dart';
+import 'package:alumni_network/models/examination_entry.dart';
+import 'package:alumni_network/models/examination_period.dart';
 import 'package:alumni_network/models/post.dart';
 import 'package:alumni_network/models/user.dart';
 import 'package:dio/dio.dart';
@@ -104,5 +106,22 @@ class RestClient {
     );
 
     return response.data!['token'];
+  }
+
+  Future<List<ExaminationPeriod>> getExaminationPeriods() async {
+    final response = await dio.get<List>('examination-periods');
+
+    return response.data!.map((e) => ExaminationPeriod.fromMap(e)).toList();
+  }
+
+  Future<List<ExaminationEntry>> getExaminationEntries({required int examinationPeriodId}) async {
+    final response = await dio.get<List>(
+      'examination-entries',
+      queryParameters: <String, dynamic>{
+        'examination_period': examinationPeriodId,
+      },
+    );
+
+    return response.data!.map((e) => ExaminationEntry.fromMap(e)).toList();
   }
 }

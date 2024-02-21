@@ -6,6 +6,8 @@ import 'package:alumni_network/models/company.dart';
 import 'package:alumni_network/models/course_schedule_entry.dart';
 import 'package:alumni_network/models/course_schedule_student_subscription.dart';
 import 'package:alumni_network/models/employment_history.dart';
+import 'package:alumni_network/models/examination_entry.dart';
+import 'package:alumni_network/models/examination_period.dart';
 import 'package:alumni_network/models/post.dart';
 import 'package:alumni_network/models/user.dart';
 import 'package:dio/dio.dart';
@@ -48,8 +50,7 @@ class AlumniNetworkRestDAO implements AlumniNetworkDAO {
   Future<List<CourseScheduleEntry>> getSchedule() => client.getSchedule();
 
   @override
-  Future<List<CourseScheduleStudentSubscription>> getStudentSchedule() =>
-      client.getStudentSchedule();
+  Future<List<CourseScheduleStudentSubscription>> getStudentSchedule() => client.getStudentSchedule();
 
   @override
   Future<void> subscribeToCourseScheduleEntry({required int courseScheduleEntryId}) =>
@@ -60,4 +61,11 @@ class AlumniNetworkRestDAO implements AlumniNetworkDAO {
       client.unsubscribeFromCourseScheduleEntry(
         courseScheduleStudentSubscriptionId: courseScheduleStudentSubscriptionId,
       );
+
+  @override
+  Future<List<ExaminationPeriod>> getExaminationPeriods() => client.getExaminationPeriods();
+
+  @override
+  Future<List<ExaminationEntry>> getExaminationEntries({required int examinationPeriodId}) =>
+      client.getExaminationEntries(examinationPeriodId: examinationPeriodId);
 }

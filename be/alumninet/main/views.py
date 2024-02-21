@@ -190,3 +190,29 @@ class CourseScheduleStudentSubscriptions(APIView):
         models.CourseScheduleStudentSubscription.objects.get(id=course_schedule_subscription).delete()
 
         return Response(status=204)
+    
+
+class ExaminationPeriods(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        examination_periods = models.ExaminationPeriod.objects.all().filter(show=True).order_by('start_date')
+        serializer = serializers.ExaminationPeriodSerializer(examination_periods, many=True)
+
+        return Response(serializer.data)
+    
+
+class ExaminationEntries(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        validator = validators.GetExaminationEntriesValidator(data=request.query_params)
+        if not validator.is_valid():
+            return Response(status=400)
+        
+        examination_period_id = validator.validated_data['examination_period']
+        
+        examination_entries = models.ExaminationEntry.objects.filter(examination_period=examination_period_id).order_by('date', 'time')        
+        serializer = serializers.ExaminationEntrySerializer(examination_entries, many=True)
+
+        return Response(serializer.data)

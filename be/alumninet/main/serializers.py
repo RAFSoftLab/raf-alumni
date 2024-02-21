@@ -106,3 +106,18 @@ class CourseScheduleStudentSubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CourseScheduleStudentSubscription
         fields = ('id', 'course_schedule_entry')
+        
+        
+class ExaminationPeriodSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ExaminationPeriod
+        fields = '__all__'
+        
+        
+class ExaminationEntrySerializer(serializers.ModelSerializer):
+    examination_period = ExaminationPeriodSerializer()
+    course = CourseSerializer()
+    
+    class Meta:
+        model = models.ExaminationEntry
+        fields = ('id', 'examination_period', 'course', 'date', 'time', 'classroom', 'professor')

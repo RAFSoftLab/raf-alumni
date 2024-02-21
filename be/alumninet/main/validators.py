@@ -14,3 +14,6 @@ class PostCourseScheduleStudentSubscriptionsValidator(serializers.Serializer):
     
 class DeleteCourseScheduleStudentSubscriptionsValidator(serializers.Serializer):
     course_schedule_student_subscription = serializers.IntegerField(required=True)
+    
+class GetExaminationEntriesValidator(serializers.Serializer):
+    examination_period = serializers.IntegerField(required=True)

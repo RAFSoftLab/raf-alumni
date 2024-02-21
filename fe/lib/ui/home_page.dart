@@ -2,6 +2,8 @@ import 'package:alumni_network/api/alumni_network_service.dart';
 import 'package:alumni_network/api/initializer.dart';
 import 'package:alumni_network/auth/authentication_bloc.dart';
 import 'package:alumni_network/models/enums/user_role.dart';
+import 'package:alumni_network/ui/calendar/bloc/calendar_page_bloc.dart';
+import 'package:alumni_network/ui/calendar/calendar_page.dart';
 import 'package:alumni_network/ui/companies/bloc/companies_page_bloc.dart';
 import 'package:alumni_network/ui/companies/companies_page.dart';
 import 'package:alumni_network/ui/feed/bloc/feed_page_bloc.dart';
@@ -82,6 +84,11 @@ class _HomePageState extends State<HomePage> {
           if (userRole == UserRole.student)
             NavigationDestination(
               icon: Icon(Icons.calendar_month),
+              label: 'Kalendar',
+            ),
+          if (userRole == UserRole.student)
+            NavigationDestination(
+              icon: Icon(Icons.list),
               label: 'Raspored',
             ),
         ],
@@ -110,6 +117,15 @@ class _HomePageState extends State<HomePage> {
           )..add(CompaniesPageInit()),
           child: const CompaniesPage(),
         ),
+
+        /// Calendar page
+        if (userRole == UserRole.student)
+          BlocProvider<CalendarPageBloc>(
+            create: (context) => CalendarPageBloc(
+              service: getService<AlumniNetworkService>(),
+            )..add(CalendarPageInit()),
+            child: const CalendarPage(),
+          ),
 
         /// Schedule page
         if (userRole == UserRole.student)

@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "360566829995",
+    "project_id": "raf-mobile-app-411514",
+    "storage_bucket": "raf-mobile-app-411514.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:360566829995:android:5a70ff9a6bf5a55c2858ee",
+        "android_client_info": {
+          "package_name": "rs.raf_network"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "360566829995-8dc2t4jq2gtnefhaqs6supfleguabocf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "rs.raf_network",
+            "certificate_hash": "b3f224ab0162c4549b92622737b21febaf2a9e99"
+          }
+        },
+        {
+          "client_id": "360566829995-krqf7c8unpkgi22bl4a77vf2qibogo2n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALgPyId1OuYWUUSSOGRw4AjMi8GvKMHko"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "360566829995-krqf7c8unpkgi22bl4a77vf2qibogo2n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "360566829995-aqsh3sfvgn9s8mb1k3e3ev9fugtl0c7f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "raf.alumninetwork"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

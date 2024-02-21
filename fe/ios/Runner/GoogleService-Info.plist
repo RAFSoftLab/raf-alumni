@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>360566829995-aqsh3sfvgn9s8mb1k3e3ev9fugtl0c7f.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.360566829995-aqsh3sfvgn9s8mb1k3e3ev9fugtl0c7f</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>360566829995-8dc2t4jq2gtnefhaqs6supfleguabocf.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDHaFd-p-Wk_stF0SRa5DznvOVhKb97bV4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>360566829995</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>raf.alumninetwork</string>
+	<key>PROJECT_ID</key>
+	<string>raf-mobile-app-411514</string>
+	<key>STORAGE_BUCKET</key>
+	<string>raf-mobile-app-411514.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:360566829995:ios:7e07ece4db92bb652858ee</string>
+</dict>
+</plist>

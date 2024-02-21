@@ -13,13 +13,17 @@ class LoginPageBloc extends Bloc<LoginPageEvent, LoginPageState> {
     on<LoginPageGoogleSignIn>((event, emit) async {
       try {
         // Trigger the authentication flow
-        final googleUser = await GoogleSignIn().signIn();
+        final googleUser = await GoogleSignIn(
+          scopes: [
+            'https://www.googleapis.com/auth/userinfo.profile',
+          ],
+        ).signIn();
 
         // Obtain the auth details from the request
         final googleAuth = await googleUser?.authentication;
         final token = await service.googleSignIn(
           accessToken: googleAuth!.accessToken!,
-          idToken: googleAuth.idToken!,
+          idToken: googleAuth.idToken ?? '',
         );
 
         authenticationBloc.add(AuthenticationUserAuthenticated(jwt: token));

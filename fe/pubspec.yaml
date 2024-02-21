@@ -24,6 +24,10 @@ dependencies:
   cached_network_image: 3.3.0
   pdf_render: 1.4.0
 
+  # Firebase:
+  firebase_core: 2.25.4
+  firebase_messaging: 14.7.16
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -102,6 +102,7 @@ class RestClient {
       'google-login',
       data: <String, dynamic>{
         'id_token': idToken,
+        'access_token': accessToken,
       },
     );
 

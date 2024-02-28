@@ -25,7 +25,7 @@ System supports several key roles which are essential for the effective function
 - **Access Rights**:
   - Full access to all platform features including administrative tools and user management.
 
-## 3. Students
+## 3. Student User
 - **Primary Role**: Active Faculty students.
 - **Responsibilities**:
   - Participate in groups and discussions.

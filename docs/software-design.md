@@ -2,6 +2,11 @@
 
 This document provides an overview of the architecture for a mobile application system, focusing on the integration between the Flutter mobile client, the Django REST API backend, and various data management services including PostgreSQL and Redis. It also details the integration with an external service that periodically sends course data via a webhook, and the implementation of push notifications through Firebase.
 
+## Visual overview:
+
+![Untitled-2024-02-28-1919](https://github.com/RAFSoftLab/raf-network/assets/13720535/54e872fc-a56d-4cf5-a08c-860a9b08deed)
+
+
 ## Flutter Mobile Application (Client)
 
 The Flutter mobile application acts as the primary interface for end-users. It is designed to offer a seamless and efficient user experience, enabling access to data and functionalities provided by the Django REST API.
@@ -41,3 +46,4 @@ The system integrates with an external service that sends course data periodical
 ## Conclusion
 
 This architecture outlines a comprehensive, scalable, and efficient system for managing and delivering course-related data to a Flutter mobile application. By leveraging Django, PostgreSQL, and Redis, coupled with real-time data updates via webhooks and push notifications through Firebase, the system ensures a dynamic and engaging user experience.
+

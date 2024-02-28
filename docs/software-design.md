@@ -4,6 +4,7 @@ This document provides an overview of the architecture for a mobile application 
 
 ## Visual overview:
 
+This graph illustrates the core components of the system.
 ![Untitled-2024-02-28-1919](https://github.com/RAFSoftLab/raf-network/assets/13720535/54e872fc-a56d-4cf5-a08c-860a9b08deed)
 
 

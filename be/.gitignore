@@ -139,3 +139,5 @@ staticfiles/
 db/
 
 .sqlite3
+grafana/
+prometheus/

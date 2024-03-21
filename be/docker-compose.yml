@@ -16,6 +16,25 @@ services:
     volumes:
       - ./alumninet:/usr/src/app
       - ./db:/usr/src/app/db
+
+  raf_service_consumer:
+    build:
+      dockerfile: Dockerfile
+      context: ./alumninet
+    command: sh -c "python manage.py consume_raf_service"
+    env_file:
+      - ./env
+    volumes:
+      - ./alumninet:/usr/src/app
+
+  rabbitmq:
+    image: "rabbitmq:management"
+    restart: unless-stopped
+    volumes:
+      - ./rabbitmq:/var/lib/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
     
   prometheus:
     image: prom/prometheus
@@ -56,3 +75,9 @@ services:
     - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     depends_on:
     - prometheus 
+
+  redis:
+    restart: unless-stopped
+    image: redis:7.0.5-alpine 
+    ports:
+    - '6379:6379'

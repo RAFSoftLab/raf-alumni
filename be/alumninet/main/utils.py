@@ -5,6 +5,10 @@ import uuid
 
 from rest_framework_jwt.compat import gettext_lazy as _
 from rest_framework_jwt.settings import api_settings
+from contextlib import contextmanager
+from django.conf import settings
+
+import pika
 
 
 def unix_epoch(datetime_object=None):
@@ -56,3 +60,13 @@ def jwt_create_payload(user):
         payload['iss'] = api_settings.JWT_ISSUER
 
     return payload
+
+
+@contextmanager
+def rabbit_connection():
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=settings.RABBITMQ_HOST))
+    channel = connection.channel()
+    try:
+        yield channel
+    finally:
+        connection.close()

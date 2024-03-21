@@ -2,6 +2,8 @@ from rest_framework_jwt.utils import jwt_encode_payload
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
+from alumninet.decorators import custom_cache
+from . import utils
 
 from . import models
 from . import serializers
@@ -9,6 +11,7 @@ from . import validators
 from . import utils
 
 import requests
+import json
 import re
 
 class GoogleLogin(APIView):
@@ -103,6 +106,7 @@ class AcademicHistory(APIView):
 class Company(APIView):
     permission_classes = [permissions.AllowAny]
     
+    @custom_cache(timeout = 60 * 60 * 12, key = 'get-all-companies')    
     def get(self, request):
         companies = models.Company.objects.all()
         serializer = serializers.CompanySerializer(companies, many=True)
@@ -129,16 +133,17 @@ class EmploymentHistory(APIView):
 class Posts(APIView):
     permission_classes = [permissions.AllowAny]
 
+    @custom_cache(timeout = 60 * 60 * 12, key = 'get-all-posts')
     def get(self, request):
         posts = models.Post.objects.all().order_by('-date_created')
         serializer = serializers.PostSerializer(posts, many=True)
 
         return Response(serializer.data)
     
-
 class Courses(APIView):
     permission_classes = [permissions.AllowAny]
 
+    @custom_cache(timeout = 60 * 60 * 12, key = 'get-all-courses')
     def get(self, request):
         courses = models.Course.objects.all().order_by('name')
         serializer = serializers.CourseSerializer(courses, many=True)
@@ -149,6 +154,7 @@ class Courses(APIView):
 class CourseSchedule(APIView):
     permission_classes = [permissions.AllowAny]
 
+    @custom_cache(timeout = 60 * 60 * 12, key = 'get-course-schedule')
     def get(self, request):
         course_schedule = models.CourseScheduleEntry.objects.all().order_by('course__name', 'type', 'day', 'start_time')
         serializer = serializers.CourseScheduleEntrySerializer(course_schedule, many=True)
@@ -195,6 +201,7 @@ class CourseScheduleStudentSubscriptions(APIView):
 class ExaminationPeriods(APIView):
     permission_classes = [permissions.AllowAny]
 
+    @custom_cache(timeout = 60 * 60 * 6, key = 'get-all-examination-periods')
     def get(self, request):
         examination_periods = models.ExaminationPeriod.objects.all().filter(show=True).order_by('start_date')
         serializer = serializers.ExaminationPeriodSerializer(examination_periods, many=True)
@@ -216,3 +223,27 @@ class ExaminationEntries(APIView):
         serializer = serializers.ExaminationEntrySerializer(examination_entries, many=True)
 
         return Response(serializer.data)
+
+
+class RafServiceWebhook(APIView):
+    permission_classes = [permissions.AllowAny]
+    
+    def post(self, request):
+        print(request)
+
+        return Response('Received data via webhook')
+    
+class RafServiceMessageBroker(APIView):
+    permission_classes = [permissions.AllowAny]
+    
+    def post(self, request):
+        exchange_name = 'raf_service_exchange'
+        routing_key = 'raf_service_key'
+        message = {
+            'course_name': 'Uvod u programiranje'
+        }
+        
+        with utils.rabbit_connection() as channel:
+            channel.basic_publish(exchange=exchange_name, routing_key=routing_key, body=json.dumps(message), mandatory=True)
+        
+        return Response('Sent message to RabbitMQ')

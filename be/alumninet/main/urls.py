@@ -15,4 +15,6 @@ urlpatterns = [
     path('course-schedule-student-subscriptions', views.CourseScheduleStudentSubscriptions.as_view(), name='course-schedule-student-subscriptions'),
     path('examination-periods', views.ExaminationPeriods.as_view()),
     path('examination-entries', views.ExaminationEntries.as_view()),
+    path('raf-service-webhook', views.RafServiceWebhook.as_view()),
+    path('raf-service-rabbit', views.RafServiceMessageBroker.as_view()),
 ]

@@ -11,11 +11,23 @@ services:
     env_file: 
       - ./env
     ports:
-      - '8080:80'
+      - '8070:80'
     restart: unless-stopped
+    networks:
+      - internal
+      - traefik_proxy
     volumes:
       - ./alumninet:/usr/src/app
       - ./db:/usr/src/app/db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.alumninet.rule=Host(`raf.code-dream.com`)"
+      - "traefik.http.routers.alumninet.tls=true"
+      - "traefik.http.routers.alumninet.entrypoints=websecure"
+      - "traefik.http.routers.alumninet.tls.certresolver=letsencrypt"
+      - "traefik.http.services.alumninet.loadbalancer.server.port=80"
+      - "traefik.priority=101"
+      - "traefik.docker.network=traefik_proxy"
 
   raf_service_consumer:
     build:
@@ -24,6 +36,8 @@ services:
     command: sh -c "python manage.py consume_raf_service"
     env_file:
       - ./env
+    networks:
+      - internal
     volumes:
       - ./alumninet:/usr/src/app
 
@@ -35,49 +49,66 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    networks:
+      - internal
     
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    restart: unless-stopped
-    volumes:
-      - ./prometheus:/prometheus
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - '4000:9090'
+  # prometheus:
+  #   image: prom/prometheus
+  #   container_name: prometheus
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./prometheus:/prometheus
+  #     - ./prometheus.yml:/etc/prometheus/prometheus.yml
+  #   networks:
+  #     - internal
+  #   ports:
+  #     - '4000:9090'
   
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    environment:
-      GF_INSTALL_PLUGINS: "grafana-clock-panel, grafana-simple-json-datasource"
-    restart: unless-stopped
-    volumes:
-      - ./grafana:/var/lib/grafana
-    ports:
-      - '3000:3000'
-    depends_on:
-      - prometheus
+  # grafana:
+  #   image: grafana/grafana
+  #   container_name: grafana
+  #   environment:
+  #     GF_INSTALL_PLUGINS: "grafana-clock-panel, grafana-simple-json-datasource"
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./grafana:/var/lib/grafana
+  #   ports:
+  #     - '3000:3000'
+  #   networks:
+  #     - internal
+  #   depends_on:
+  #     - prometheus
 
-  exporter:
-    image: prom/node-exporter
-    container_name: node
-    ports:
-    - '9100:9100'
-    volumes:
-    - /proc:/host/proc:ro
-    - /sys:/host/sys:ro
-    - /:/rootfs:ro
-    command:
-    - '--path.procfs=/host/proc'
-    - '--path.rootfs=/rootfs'
-    - '--path.sysfs=/host/sys'
-    - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
-    depends_on:
-    - prometheus 
+  # exporter:
+  #   image: prom/node-exporter
+  #   container_name: node
+  #   ports:
+  #   - '9100:9100'
+  #   volumes:
+  #   - /proc:/host/proc:ro
+  #   - /sys:/host/sys:ro
+  #   - /:/rootfs:ro
+  #   command:
+  #   - '--path.procfs=/host/proc'
+  #   - '--path.rootfs=/rootfs'
+  #   - '--path.sysfs=/host/sys'
+  #   - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+  #   networks:
+  #     - internal
+  #   depends_on:
+  #   - prometheus 
 
   redis:
     restart: unless-stopped
     image: redis:7.0.5-alpine 
     ports:
     - '6379:6379'
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge
+    name: internal
+  traefik_proxy:
+    external: true

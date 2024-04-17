@@ -31,7 +31,7 @@ LOCAL = os.environ['LOCAL'] == '1'
 
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['http://0.0.0.0:80']
+CSRF_TRUSTED_ORIGINS = ['http://0.0.0.0:80', 'https://www.raf.code-dream.com', 'https://raf.code-dream.com']
 
 # Application definition
 

@@ -142,3 +142,5 @@ db/
 grafana/
 prometheus/
 rabbitmq/
+
+docker-compose.yml

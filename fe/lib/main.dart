@@ -17,9 +17,9 @@ Future<void> main() async {
   await Initializer().initServices();
 
   await Firebase.initializeApp(name: 'raf-mobile-app-411514', options: AppFirebaseOptions.currentPlatform);
-  await FirebaseMessaging.instance.requestPermission(provisional: true);
-  final fcmToken = await FirebaseMessaging.instance.getToken();
-  print('FCM token: $fcmToken');
+  // await FirebaseMessaging.instance.requestPermission(provisional: true);
+  // final fcmToken = await FirebaseMessaging.instance.getToken();
+  // print('FCM token: $fcmToken');
 
   runApp(const AlumniNetworkApp());
 }

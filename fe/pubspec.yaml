@@ -22,7 +22,7 @@ dependencies:
 
   # UI packages:
   cached_network_image: 3.3.0
-  pdf_render: 1.4.0
+  pdf_render: 1.4.8
 
   # Firebase:
   firebase_core: 2.25.4

@@ -35,7 +35,7 @@ class FeedPage extends StatelessWidget {
                           dividerColor: Colors.transparent
                       ),
                       child: ExpansionTile(
-                          title: Text(post.title, style: Theme.of(context).textTheme.headline6),
+                          title: Text(post.title, style: Theme.of(context).textTheme.headlineSmall),
                           leading: InkWell(
                             onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
@@ -75,7 +75,7 @@ class FeedPage extends StatelessWidget {
                                         padding: const EdgeInsets.all(8.0),
                                         child: const Divider(),
                                       ),
-                                      Text('Komentari:', style: Theme.of(context).textTheme.subtitle1),
+                                      Text('Komentari:', style: Theme.of(context).textTheme.headlineSmall),
                                       Padding(
                                         padding: EdgeInsets.only(left: 0),
                                         child: Column(
